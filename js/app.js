@@ -19,7 +19,8 @@ var pauseButton = document.getElementById("pauseButton");
 //add events to those 2 buttons
 recordButton.addEventListener("click", startRecording);
 stopButton.addEventListener("click", stopRecording);
-pauseButton.addEventListener("click", pauseRecording);
+pauseButton.addEventListener("click", breakRecording);
+resumeButton.addEventListener("click", resumeRecording);
 
 
 
@@ -128,7 +129,36 @@ function stopRecording() {
 
 	__log('Recording stopped');
 }
+function breakRecording() {
+	console.log("pauseRecording() called");
+	
+	//stop microphone access
+	//gumStream.getAudioTracks()[0].stop();
 
+	//disable the stop button
+	//stopButton.disabled = true;
+	recordButton.disabled = false;
+	
+	//tell the recorder to finish the recording (stop recording + encode the recorded audio)
+	recorder.pauseRecording();
+
+	__log('Recording breaked');
+}
+function resumeRecording() {
+	console.log("resumeRecording() called");
+	
+	//stop microphone access
+	//gumStream.getAudioTracks()[0].stop();
+
+	//disable the stop button
+	//stopButton.disabled = true;
+	recordButton.disabled = false;
+	
+	//tell the recorder to finish the recording (stop recording + encode the recorded audio)
+	recorder.resumeRecording();
+
+	//__log('Recording stopped');
+}
 
 
 function createDownloadLink(blob,encoding) {

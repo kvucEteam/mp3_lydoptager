@@ -131,6 +131,34 @@
       } else
         this.error("finishRecording: no recording is running");
     },
+/// New functionality
+      pauseRecording: function() {
+      if (this.isRecording()) {
+        this.input.disconnect();
+        this.processor.disconnect();
+        //delete this.processor;
+        //this.worker.postMessage({ command: "finish" });
+      } else
+        this.error("finishRecording: no recording is running");
+    },
+    resumeRecording: function() {
+      /*if (this.isRecording())
+        this.error("startRecording: previous recording is running");
+      else {*/
+        this.processor.connect(this.context.destination);
+        this.processor.onaudioprocess = function(event) {
+          for (var ch = 0; ch < numChannels; ++ch)
+            buffer[ch] = event.inputBuffer.getChannelData(ch);
+          worker.postMessage({ command: "record", buffer: buffer });
+        };
+        this.worker.postMessage({
+          command: "start",
+          bufferSize: this.processor.bufferSize
+        });
+        this.startTime = Date.now();
+      //}
+    },
+
 
     cancelEncoding: function() {
       if (this.options.encodeAfterRecord)
